@@ -49,6 +49,23 @@ npm run build
 npm run preview
 ```
 
+## Deploy on Vercel
+
+1. Push this repo to GitHub (already at [neseliolfu2re/web3redflag](https://github.com/neseliolfu2re/web3redflag)).
+2. Go to [vercel.com](https://vercel.com) → **Add New** → **Project** → Import the repository.
+3. Vercel usually auto-detects **Vite**: build command `npm run build`, output `dist` (see [`vercel.json`](./vercel.json)).
+4. Deploy. Set your production URL in the README / repo “Website” field if you like.
+
+CLI (optional):
+
+```bash
+npx vercel
+```
+
+## Security & safe use
+
+See **[SECURITY.md](./SECURITY.md)** — not financial advice; do not paste seed phrases, private keys, or other highly sensitive data.
+
 ## License
 
 [MIT](./LICENSE) — patterns and code are contributed under the same license unless stated otherwise.
