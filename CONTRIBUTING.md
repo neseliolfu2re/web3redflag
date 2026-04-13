@@ -1,6 +1,6 @@
 # Contributing patterns
 
-Thanks for helping improve the [Web3 Red Flag Detector](https://github.com/neseliolfu2re/web3redflag). This project is a **keyword toy**, not financial or security advice.
+Thanks for helping improve the [Web3 Red Flag Detector](https://github.com/neseliolfu2re/web3redflag). **Try it live:** [web3-redflag.vercel.app](https://web3-redflag.vercel.app). This project is a **keyword toy**, not financial or security advice.
 
 ## Quick path
 

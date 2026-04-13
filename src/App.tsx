@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from 'react'
 import { buildTextExport, downloadResultPng } from './lib/exportReport'
 import { scanWeb3RedFlags, type ScanResult } from './lib/web3RedFlags'
+import { SITE_URL, siteEmbedUrl } from './siteConfig'
 
 function severityStyles(s: ScanResult['severity']): string {
   switch (s) {
@@ -306,18 +307,36 @@ export default function App() {
             </a>
             .
           </p>
+          <p className="mt-3 text-xs leading-relaxed text-zinc-500">
+            <span className="text-zinc-400">Live</span>{' '}
+            <a
+              href={SITE_URL}
+              className="text-red-400/90 underline decoration-red-500/40 underline-offset-2 hover:text-red-300"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {SITE_URL.replace(/^https:\/\//, '')}
+            </a>
+          </p>
           <p className="mt-4 text-xs leading-relaxed text-zinc-500">
-            <span className="text-zinc-400">Embed</span> — add an iframe pointing
-            to this app with{' '}
+            <span className="text-zinc-400">Embed</span> — iframe with{' '}
             <code className="rounded bg-zinc-900 px-1.5 py-0.5 text-zinc-400">
               ?embed=1
             </code>{' '}
-            (compact header). Example:{' '}
+            (compact header). Production URL:{' '}
             <code className="break-all rounded bg-zinc-900 px-1.5 py-0.5 text-[11px] text-zinc-500">
-              {typeof window !== 'undefined'
-                ? `${window.location.origin}${window.location.pathname}?embed=1`
-                : '/?embed=1'}
+              {siteEmbedUrl}
             </code>
+            {typeof window !== 'undefined' &&
+              window.location.origin !== new URL(SITE_URL).origin && (
+                <>
+                  {' '}
+                  · local:{' '}
+                  <code className="break-all rounded bg-zinc-900 px-1 py-0.5 text-[11px] text-zinc-600">
+                    {`${window.location.origin}${window.location.pathname}?embed=1`}
+                  </code>
+                </>
+              )}
           </p>
         </footer>
       )}
