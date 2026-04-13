@@ -2,7 +2,7 @@
 
 [![Repo](https://img.shields.io/badge/GitHub-web3redflag-181717?logo=github)](https://github.com/neseliolfu2re/web3redflag)
 
-Browser-only **entertainment / gut-check** tool: paste English text (project copy or your own notes) and see heuristic “red flag” pattern matches. **Not financial advice.** Not a security audit.
+Browser-only **entertainment / gut-check** tool: paste or write English text (your notes, a snippet, anything) and see heuristic “red flag” pattern matches. **Not financial advice.** Not a security audit.
 
 **Repository:** [github.com/neseliolfu2re/web3redflag](https://github.com/neseliolfu2re/web3redflag)
 

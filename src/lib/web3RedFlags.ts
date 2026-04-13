@@ -555,7 +555,7 @@ export function scanWeb3RedFlags(text: string): ScanResult {
       severity: 'clear',
       hits: [],
       summary:
-        'Paste or type a bit more text — project copy, your own notes, or a quick take (8+ characters).',
+        'Paste or type a bit more text — your own notes or a quick take (8+ characters).',
     }
   }
 

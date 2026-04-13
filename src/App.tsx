@@ -121,9 +121,8 @@ export default function App() {
           </div>
           {!embed && (
             <p className="max-w-xl text-sm leading-relaxed text-zinc-400">
-              Paste official project copy <span className="text-zinc-500">or</span>{' '}
-              write your own notes and gut reactions — a tweet, Discord log,
-              bullet list, anything in English. We match common{' '}
+              Write your own notes and gut reactions — or paste a tweet, Discord
+              log, bullet list, anything in English. We match common{' '}
               <span className="text-zinc-300">scam &amp; hype-style patterns</span>{' '}
               in the text; not a security audit.
             </p>
@@ -151,7 +150,7 @@ export default function App() {
 
         <div className="flex flex-col gap-3">
           <label htmlFor="paste" className="text-sm font-medium text-zinc-300">
-            Your text (project copy or your own words)
+            Your text
           </label>
           <textarea
             id="paste"
