@@ -1,7 +1,7 @@
 # Web3 Red Flag Detector
 
 [![Repo](https://img.shields.io/badge/GitHub-web3redflag-181717?logo=github)](https://github.com/neseliolfu2re/web3redflag)
-[![Live](https://img.shields.io/badge/Live-web3--redflag.vercel.app-000000?logo=vercel)](https://web3-redflag.vercel.app)
+[![Live](https://img.shields.io/badge/Live-web3--redflag.vercel.app-000000?logo=vercel)](https://web3redflag.vercel.app/)
 
 **Live demo:** [web3-redflag.vercel.app](https://web3redflag.vercel.app/)
 
