@@ -19,7 +19,7 @@ Topics are set on GitHub only: repo **About** → **⚙️** next to “About”
 
 1. Write or paste text (8+ characters).
 2. Click **Scan for red flags**.
-3. Optionally **Copy text report** or **Download PNG** (both include a not-advice watermark).
+3. Optionally **Copy text report** (includes a not-advice watermark).
 
 ## Contributing patterns
 
