@@ -21,11 +21,11 @@ function severityStyles(s: ScanResult['severity']): string {
 function severityLabel(s: ScanResult['severity']): string {
   switch (s) {
     case 'clear':
-      return 'Low signal'
+      return 'Mild (fewer matches)'
     case 'caution':
       return 'Caution'
     case 'high':
-      return 'High risk signals'
+      return 'Strong signals'
     case 'critical':
       return 'Critical — stop & verify'
     default:
@@ -82,8 +82,11 @@ export default function App() {
       await downloadResultPng(resultRef.current)
       setExportMsg('Downloaded PNG with watermark.')
       window.setTimeout(() => setExportMsg(null), 3500)
-    } catch {
-      setExportMsg('PNG export failed.')
+    } catch (e) {
+      const msg =
+        e instanceof Error ? e.message.slice(0, 160) : 'PNG export failed.'
+      setExportMsg(`PNG export failed: ${msg}`)
+      window.setTimeout(() => setExportMsg(null), 8000)
     }
   }
 
@@ -135,18 +138,49 @@ export default function App() {
         className={`relative mx-auto flex w-full max-w-2xl flex-1 flex-col gap-5 ${embed ? 'px-3 py-4' : 'px-4 py-5 sm:px-6'}`}
       >
         {!embed && (
-          <details className="group rounded-xl border border-zinc-800/90 bg-zinc-900/40 px-4 py-3 text-sm text-zinc-300 ring-1 ring-zinc-800/80">
-            <summary className="cursor-pointer font-medium text-zinc-100 outline-none marker:text-red-500">
-              How to use
-            </summary>
-            <p className="mt-3 leading-relaxed text-zinc-400">
-              Type your own sentence or paste any English text (pitch, DM, your
-              notes). Hit <span className="text-zinc-300">Scan for red flags</span>
-              . The score only flags keyword-style patterns — it is{' '}
-              <span className="text-zinc-300">not</span> a recommendation to buy,
-              sell, or trust anything.
-            </p>
-          </details>
+          <>
+            <details className="group rounded-xl border border-zinc-800/90 bg-zinc-900/40 px-4 py-3 text-sm text-zinc-300 ring-1 ring-zinc-800/80">
+              <summary className="cursor-pointer font-medium text-zinc-100 outline-none marker:text-red-500">
+                How to use
+              </summary>
+              <p className="mt-3 leading-relaxed text-zinc-400">
+                Type your own sentence or paste any English text (pitch, DM, your
+                notes). Hit <span className="text-zinc-300">Scan for red flags</span>
+                . The score only flags keyword-style patterns — it is{' '}
+                <span className="text-zinc-300">not</span> a recommendation to buy,
+                sell, or trust anything.
+              </p>
+            </details>
+            <details className="group rounded-xl border border-zinc-800/90 bg-zinc-900/40 px-4 py-3 text-sm text-zinc-300 ring-1 ring-zinc-800/80">
+              <summary className="cursor-pointer font-medium text-zinc-100 outline-none marker:text-red-500">
+                How scoring works
+              </summary>
+              <ul className="mt-3 list-inside list-disc space-y-2 leading-relaxed text-zinc-400">
+                <li>
+                  The <span className="text-zinc-300">0–100 number</span> is{' '}
+                  <span className="text-zinc-300">not</span> a mark where 100 is the
+                  goal. It is a <span className="text-zinc-300">tally</span>: sum of
+                  weights for each distinct rule that matched (each rule at most
+                  once). <span className="text-zinc-300">Higher = more warning-style
+                  patterns</span> in the text, like stacking flags — not “you scored
+                  10% on a test.”
+                </li>
+                <li>
+                  Example: “no community” alone might be one rule →{' '}
+                  <span className="text-zinc-300">+10</span> → total{' '}
+                  <span className="text-zinc-300">10</span>. Add “VC influence” text
+                  and another rule fires → <span className="text-zinc-300">+11</span>{' '}
+                  → total <span className="text-zinc-300">21</span>. Two different
+                  signals add up.
+                </li>
+                <li>
+                  <span className="text-zinc-300">Bands</span> (Mild / Caution /
+                  …): rough buckets on that total. A low total means fewer rules
+                  matched in this crude keyword game — it does not certify safety.
+                </li>
+              </ul>
+            </details>
+          </>
         )}
 
         <div className="flex flex-col gap-3">
@@ -199,13 +233,24 @@ export default function App() {
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-xs text-zinc-500">Heuristic score</p>
-                <p className="text-2xl font-bold tabular-nums text-white">
+                <p className="text-xs text-zinc-500">Pattern tally</p>
+                <p
+                  className="text-2xl font-bold tabular-nums text-white"
+                  title="Not a grade: higher means more weighted rules matched, not a better project."
+                >
                   {result.score}
                   <span className="text-base font-normal text-zinc-500">/100</span>
                 </p>
               </div>
             </div>
+
+            <p className="mt-3 text-xs leading-relaxed text-zinc-500">
+              <span className="text-zinc-400">Not a school grade.</span> This is a
+              sum of matched warning-style patterns (each rule has a weight).{' '}
+              <span className="text-zinc-300">Higher = more patterns hit</span>, not
+              “smarter” or “better.” 100/100 means many different rules matched at
+              once — scarier in this toy model, not an achievement.
+            </p>
 
             <div className="mt-4 h-2 overflow-hidden rounded-full bg-zinc-800">
               <div
@@ -266,7 +311,10 @@ export default function App() {
               </span>
             </div>
             {exportMsg && (
-              <p className="mt-2 text-xs text-emerald-400/90" role="status">
+              <p
+                className={`mt-2 text-xs ${exportMsg.startsWith('PNG export failed') ? 'text-amber-400/95' : 'text-emerald-400/90'}`}
+                role="status"
+              >
                 {exportMsg}
               </p>
             )}

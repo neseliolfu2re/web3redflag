@@ -50,6 +50,24 @@ function pickScale(width: number, height: number): number[] {
   return out.length > 0 ? out : [0.5]
 }
 
+function sanitizeCloneForCapture(cloned: HTMLElement): void {
+  cloned.style.fontFamily = 'ui-sans-serif, system-ui, sans-serif'
+  const walker = cloned.ownerDocument.createTreeWalker(
+    cloned,
+    NodeFilter.SHOW_TEXT,
+  )
+  const textNodes: Text[] = []
+  let n: Node | null
+  while ((n = walker.nextNode())) {
+    if (n.nodeValue && /[\u{1F300}-\u{1FAFF}]/u.test(n.nodeValue)) {
+      textNodes.push(n as Text)
+    }
+  }
+  for (const t of textNodes) {
+    t.nodeValue = t.nodeValue!.replace(/[\u{1F300}-\u{1FAFF}]/gu, '')
+  }
+}
+
 async function renderToCanvas(
   element: HTMLElement,
   scale: number,
@@ -62,7 +80,42 @@ async function renderToCanvas(
     useCORS: true,
     foreignObjectRendering: false,
     imageTimeout: 15000,
+    onclone: (_doc, cloned) => {
+      if (cloned instanceof HTMLElement) sanitizeCloneForCapture(cloned)
+    },
   })
+}
+
+/** Fallback when html2canvas fails (Safari, huge DOM, emoji/fonts). */
+async function renderViaHtmlToImage(element: HTMLElement): Promise<HTMLCanvasElement> {
+  const { toPng } = await import('html-to-image')
+  const w = Math.max(1, element.offsetWidth || element.scrollWidth)
+  const h = Math.max(1, element.offsetHeight || element.scrollHeight)
+  const pr = Math.min(2, 4096 / Math.max(w, h), 8192 / w, 8192 / h)
+  const pixelRatio = Number.isFinite(pr) && pr > 0.25 ? pr : 1
+
+  const dataUrl = await toPng(element, {
+    pixelRatio,
+    backgroundColor: '#0a0a0c',
+    cacheBust: true,
+    style: { fontFamily: 'ui-sans-serif, system-ui, sans-serif' },
+  })
+
+  const img = new Image()
+  img.crossOrigin = 'anonymous'
+  await new Promise<void>((resolve, reject) => {
+    img.onload = () => resolve()
+    img.onerror = () => reject(new Error('Could not load PNG preview'))
+    img.src = dataUrl
+  })
+
+  const c = document.createElement('canvas')
+  c.width = img.naturalWidth
+  c.height = img.naturalHeight
+  const x = c.getContext('2d')
+  if (!x) throw new Error('Could not create image canvas')
+  x.drawImage(img, 0, 0)
+  return c
 }
 
 function triggerPngDownload(canvas: HTMLCanvasElement, filename: string): Promise<void> {
@@ -116,7 +169,13 @@ export async function downloadResultPng(
     }
   }
   if (!snap) {
-    throw lastErr instanceof Error ? lastErr : new Error(String(lastErr))
+    try {
+      snap = await renderViaHtmlToImage(element)
+    } catch (e2) {
+      const first = lastErr instanceof Error ? lastErr.message : String(lastErr)
+      const second = e2 instanceof Error ? e2.message : String(e2)
+      throw new Error(`PNG capture failed (${first}; fallback: ${second})`)
+    }
   }
 
   const barH = 48
