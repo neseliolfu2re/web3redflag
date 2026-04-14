@@ -3,7 +3,7 @@
 [![Repo](https://img.shields.io/badge/GitHub-web3redflag-181717?logo=github)](https://github.com/neseliolfu2re/web3redflag)
 [![Live](https://img.shields.io/badge/Live-web3--redflag.vercel.app-000000?logo=vercel)](https://web3redflag.vercel.app/)
 
-**Live demo:** [web3-redflag.vercel.app](https://web3redflag.vercel.app/)
+**Live demo:** [web3redflag.vercel.app](https://web3redflag.vercel.app/)
 
 Browser-only **entertainment / gut-check** tool: paste or write English text (your notes, a snippet, anything) and see heuristic “red flag” pattern matches. **Not financial advice.** Not a security audit.
 
