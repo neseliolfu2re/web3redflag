@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react'
-import { buildTextExport } from './lib/exportReport'
+import { useMemo, useRef, useState } from 'react'
+import { buildTextExport, downloadResultPng } from './lib/exportReport'
 import { scanWeb3RedFlags, type ScanResult } from './lib/web3RedFlags'
 import { SITE_URL, siteEmbedUrl } from './siteConfig'
 
@@ -46,6 +46,7 @@ export default function App() {
   const [result, setResult] = useState<ScanResult | null>(null)
   const [pending, setPending] = useState(false)
   const [exportMsg, setExportMsg] = useState<string | null>(null)
+  const resultRef = useRef<HTMLDivElement>(null)
 
   const canScan = input.trim().length >= 8
 
@@ -72,6 +73,20 @@ export default function App() {
       window.setTimeout(() => setExportMsg(null), 3500)
     } catch {
       setExportMsg('Could not copy — try another browser.')
+    }
+  }
+
+  async function handlePng() {
+    if (!resultRef.current || !result) return
+    try {
+      await downloadResultPng(resultRef.current, result)
+      setExportMsg('Downloaded PNG with watermark.')
+      window.setTimeout(() => setExportMsg(null), 3500)
+    } catch (e) {
+      const msg =
+        e instanceof Error ? e.message.slice(0, 160) : 'PNG export failed.'
+      setExportMsg(`PNG export failed: ${msg}`)
+      window.setTimeout(() => setExportMsg(null), 8000)
     }
   }
 
@@ -200,6 +215,7 @@ export default function App() {
 
         {result && (
           <div
+            ref={resultRef}
             className="rounded-2xl border border-zinc-800/90 bg-zinc-900/50 p-4 sm:p-5"
             role="region"
             aria-live="polite"
@@ -283,10 +299,20 @@ export default function App() {
               >
                 Copy text report
               </button>
+              <button
+                type="button"
+                onClick={() => void handlePng()}
+                className="rounded-lg border border-zinc-600 bg-zinc-800/80 px-3 py-2 text-xs font-medium text-zinc-200 hover:bg-zinc-700"
+              >
+                Download PNG
+              </button>
+              <span className="self-center text-[10px] text-zinc-600">
+                PNG is a text layout of your result (readable in any viewer).
+              </span>
             </div>
             {exportMsg && (
               <p
-                className={`mt-2 text-xs ${exportMsg.includes('Could not') ? 'text-amber-400/95' : 'text-emerald-400/90'}`}
+                className={`mt-2 text-xs ${exportMsg.startsWith('PNG export failed') || exportMsg.includes('Could not') ? 'text-amber-400/95' : 'text-emerald-400/90'}`}
                 role="status"
               >
                 {exportMsg}
