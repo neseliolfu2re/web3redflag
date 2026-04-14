@@ -307,8 +307,7 @@ export default function App() {
                 Download PNG
               </button>
               <span className="self-center text-[10px] text-zinc-600">
-                Watermark on screenshots; if capture fails, a plain-text layout PNG
-                is used instead.
+                PNG is a text layout of your result (readable in any viewer).
               </span>
             </div>
             {exportMsg && (
