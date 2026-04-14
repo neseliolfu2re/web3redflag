@@ -506,17 +506,31 @@ export const copyPasteEcosystem: RegExp[] = [
   /\bthinly veiled fork\b/i,
 ]
 
-/** Language / stack learning curve (dev onboarding friction) */
-export const languageLearningCurve: RegExp[] = [
-  /\blanguage learning curve\b/i,
-  /\bsteep learning curve\b.*\b(dev|developer|stack|language|ecosystem|syntax|chain|onboard)\b/i,
-  /\b(learning curve|onboarding)\b.*\b(dev|developer|stack|language)\b/i,
-  /\bbarrier to entry\b.*\b(dev|developer|new devs)\b/i,
-  /\bshortage of\b.*\b(dev|developer)s?\b/i,
-  /\bunfamiliar (language|syntax|stack)\b/i,
-  /\bhard(er)? to learn\b.*\b(language|stack|syntax)\b/i,
-  /\bdeveloper ramp[- ]up\b/i,
-  /\bnew (language|stack)\b.*\b(friction|slow|steep)\b/i,
+/**
+ * Weak ecosystem support for learning chain languages — funding/docs/onboarding gaps,
+ * not “this language is bad.” Includes Move alongside other stacks when named.
+ */
+export const inadequateDevLearningSupport: RegExp[] = [
+  /\bdoesn'?t help\b.*\b(dev|developer|builder)s?\b.*\blearn\b/i,
+  /\bno (real )?help\b.*\b(learning|onboarding|new devs|first[- ]time devs)\b/i,
+  /\blearning (resources|materials|content)\b.*\b(lacking|missing|absent|thin|underfunded)\b/i,
+  /\beducational (content|resources)\b.*\b(insufficient|missing|stale)\b/i,
+  /\bdev (education|training|enablement)\b.*\b(neglected|underfunded|missing|afterthought)\b/i,
+  /\bno (mentorship|mentors?|office hours)\b.*\b(for )?(dev|developer|builder)s?\b/i,
+  /\bfoundation\b.*\b(doesn'?t invest in|won'?t fund|cut)\b.*\b(education|learning|training)\b/i,
+  /\bno (funded )?(tutorials|courses|workshops)\b.*\b(for )?(dev|developer)\b/i,
+  /\bon your own\b.*\b(learn|figure (it )?out|read the code)\b/i,
+  /\bbad (dev )?onboarding\b/i,
+  /\bdocs (are )?(empty|missing|outdated|useless)\b.*\b(for )?(new|first)\b/i,
+  /\bno (clear )?getting started\b/i,
+  /\bno starter (examples|templates|sample (apps|projects))\b/i,
+  /\bsdk (docs|onboarding)\b.*\b(lacking|missing|broken)\b/i,
+  /\bgrant(s)? for\b.*\b(learning|education)\b.*\b(no|none|zero)\b/i,
+  /\b(no|thin|lacking) (docs|tutorials|courses)\b.*\b(solidity|rust|vyper|cairo|haskell|plutus|michelson|scilla)\b/i,
+  /\b(solidity|rust|vyper|cairo|haskell|plutus|michelson|scilla)\b.*\b(underdocumented|no docs|docs missing|where are the docs)\b/i,
+  /\bmove language\b.*\b(underdocumented|no docs|docs missing|thin tutorials)\b/i,
+  /\b(learning move|learn move)\b.*\b(no (good )?resources|unsupported|on your own)\b/i,
+  /\bno\b.*\b(official )?(course|curriculum)\b.*\b(move language|solidity|rust|cairo)\b/i,
 ]
 
 /** Validator centralization / stake concentration */
@@ -767,6 +781,84 @@ export const lowCommunityValueAlignment: RegExp[] = [
   /\bout of touch with (the )?community\b/i,
   /\bcommunity (backlash|revolt)\b.*\b(values|direction|vision)\b/i,
   /\bdiscordant with community (values|expectations)\b/i,
+]
+
+/** Limited on-chain user retention */
+export const limitedOnChainUserRetention: RegExp[] = [
+  /\blimited on[- ]chain (user )?retention\b/i,
+  /\b(poor|low|weak) (user )?retention\b.*\b(on[- ]chain|chain|wallet)\b/i,
+  /\busers (don'?t|do not) stick\b/i,
+  /\bhigh churn\b.*\b(users|wallets|addresses)\b/i,
+  /\bone[- ]and[- ]done users\b/i,
+  /\bno sticky (users|behavior|usage)\b/i,
+  /\bdau (down|dropping|collapsed)\b/i,
+  /\bmercenary (users|capital)\b.*\b(leave|left|gone)\b/i,
+  /\bretention (is |was )?(bad|weak|terrible)\b/i,
+  /\bcan'?t retain\b.*\b(users|wallets)\b/i,
+]
+
+/** Sustained token unlock pressure over months/years (beyond one-off cliff) */
+export const tokenUnlockPressureOverTime: RegExp[] = [
+  /\bunlock pressure\b.*\b(over time|for years|ongoing|continuous)\b/i,
+  /\b(years|months) of (unlocks|vesting|supply hitting the market)\b/i,
+  /\blinear (unlock|vesting|emissions?)\b.*\b(years|ongoing)\b/i,
+  /\bprolonged (unlock|vesting) (schedule|overhang)\b/i,
+  /\brolling unlocks\b/i,
+  /\bconstant (supply|token) (influx|hit|pressure)\b/i,
+  /\bunlock (schedule|calendar)\b.*\b(heavy|packed|years)\b/i,
+  /\bsustained sell pressure\b.*\b(unlock|vest|emission)\b/i,
+  /\boverhang\b.*\b(quarters|years)\b/i,
+]
+
+/** Ecosystem fragmentation — many projects, low cohesion */
+export const ecosystemFragmentation: RegExp[] = [
+  /\becosystem fragmentation\b/i,
+  /\bfragmented ecosystem\b/i,
+  /\b(many|tons of) projects\b.*\b(low cohesion|no cohesion|don'?t work together)\b/i,
+  /\bbalkanized ecosystem\b/i,
+  /\bsiloed (projects|teams|apps)\b/i,
+  /\bno unified (vision|stack|roadmap)\b/i,
+  /\beveryone (building|building their) own\b/i,
+  /\bduplicative (dapps|projects|apps)\b/i,
+  /\blow cohesion\b.*\b(ecosystem|community)\b/i,
+  /\bscatter(ed|shot) (grants|incentives)\b/i,
+]
+
+/** Weak product–market fit in core DeFi apps */
+export const weakProductMarketFitDefi: RegExp[] = [
+  /\bweak product[- ]market fit\b/i,
+  /\b(poor|no) pmf\b.*\b(defi|dex|lending|perps)\b/i,
+  /\bcore (defi )?apps?\b.*\b(not used|unused|ghost)\b/i,
+  /\bdefi (tvl|volume)\b.*\b(fake|incentivized|empty)\b/i,
+  /\bno real demand\b.*\b(product|protocol|app)\b/i,
+  /\bsolution (looking for|without) (users|demand)\b/i,
+  /\bproduct doesn'?t fit (the )?market\b/i,
+  /\bghost (protocol|tvl|usage)\b/i,
+  /\busage (is |was )?(anemic|hollow)\b/i,
+]
+
+/** Slow adaptation to market cycles */
+export const slowAdaptationMarketCycles: RegExp[] = [
+  /\bslow adaptation\b.*\b(market|bull|bear|cycle)\b/i,
+  /\b(missed|behind) the (cycle|market)\b/i,
+  /\btoo slow to (pivot|adapt)\b/i,
+  /\bdidn'?t adapt\b.*\b(bear|bull|regime)\b/i,
+  /\bbehind (the )?market\b/i,
+  /\bstill building\b.*\b(what (the )?market wanted|last cycle)\b/i,
+  /\bwrong cycle (timing|thesis)\b/i,
+  /\bslow (to respond|response)\b.*\b(macro|liquidity|sentiment)\b/i,
+]
+
+/** Partnership hype without tangible outcomes */
+export const partnershipHypeNoOutcomes: RegExp[] = [
+  /\bpartnership(s)?\b.*\b(no (real )?outcome|vapor|nothing shipped)\b/i,
+  /\boverhyp(ed|ing)?\b.*\b(partnership|mou|collab|integration)\b/i,
+  /\bmou\b.*\b(only|no product|no integration)\b/i,
+  /\bannouncement(s)?\b.*\b(no follow[- ]through|followed by nothing)\b/i,
+  /\bstrategic (partnership|collab)\b.*\b(hollow|meaningless|pr only)\b/i,
+  /\blogo (deal|partnership)\b/i,
+  /\bpress release\b.*\b(no (real )?integration|no launch)\b/i,
+  /\bpartnership (marketing|theater)\b/i,
 ]
 
 /** Skeptical one-liners (expanded) */
