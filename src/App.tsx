@@ -79,7 +79,7 @@ export default function App() {
   async function handlePng() {
     if (!resultRef.current || !result) return
     try {
-      await downloadResultPng(resultRef.current)
+      await downloadResultPng(resultRef.current, result)
       setExportMsg('Downloaded PNG with watermark.')
       window.setTimeout(() => setExportMsg(null), 3500)
     } catch (e) {
@@ -307,7 +307,8 @@ export default function App() {
                 Download PNG
               </button>
               <span className="self-center text-[10px] text-zinc-600">
-                Exports include a not-advice watermark.
+                Watermark on screenshots; if capture fails, a plain-text layout PNG
+                is used instead.
               </span>
             </div>
             {exportMsg && (

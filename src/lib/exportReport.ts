@@ -120,62 +120,200 @@ async function renderViaHtmlToImage(element: HTMLElement): Promise<HTMLCanvasEle
 
 function triggerPngDownload(canvas: HTMLCanvasElement, filename: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    try {
-      const a = document.createElement('a')
-      a.href = canvas.toDataURL('image/png')
-      a.download = filename
-      a.click()
-      resolve()
-    } catch {
-      canvas.toBlob(
-        (blob) => {
-          if (!blob) {
-            reject(new Error('PNG export could not create image data'))
-            return
-          }
+    canvas.toBlob(
+      (blob) => {
+        if (blob) {
           const url = URL.createObjectURL(blob)
           const a = document.createElement('a')
           a.href = url
           a.download = filename
+          a.rel = 'noopener'
           a.click()
           URL.revokeObjectURL(url)
           resolve()
-        },
-        'image/png',
-      )
-    }
+          return
+        }
+        try {
+          const a = document.createElement('a')
+          a.href = canvas.toDataURL('image/png')
+          a.download = filename
+          a.rel = 'noopener'
+          a.click()
+          resolve()
+        } catch (e) {
+          reject(e instanceof Error ? e : new Error('PNG download failed'))
+        }
+      },
+      'image/png',
+      1,
+    )
   })
+}
+
+const PLAIN_W = 720
+const PLAIN_PAD = 24
+const PLAIN_MAX_HITS = 45
+
+function wrapLine(ctx: CanvasRenderingContext2D, text: string, maxW: number): string[] {
+  if (!text.trim()) return ['']
+  const words = text.split(/\s+/)
+  const lines: string[] = []
+  let cur = ''
+  for (const w of words) {
+    const next = cur ? `${cur} ${w}` : w
+    if (ctx.measureText(next).width <= maxW) {
+      cur = next
+    } else {
+      if (cur) lines.push(cur)
+      if (ctx.measureText(w).width > maxW) {
+        let chunk = ''
+        for (const ch of w) {
+          const t = chunk + ch
+          if (ctx.measureText(t).width > maxW && chunk) {
+            lines.push(chunk)
+            chunk = ch
+          } else {
+            chunk = t
+          }
+        }
+        cur = chunk
+      } else {
+        cur = w
+      }
+    }
+  }
+  if (cur) lines.push(cur)
+  return lines
+}
+
+/**
+ * No DOM snapshot — only Canvas2D text. Works when html2canvas / html-to-image fail
+ * (strict Safari, extensions, huge trees, font/CORS issues).
+ */
+export function renderPlaintextReportPng(result: ScanResult): HTMLCanvasElement {
+  const inner = PLAIN_W - PLAIN_PAD * 2
+  const lineH = 17
+  const canvas = document.createElement('canvas')
+  const measure = canvas.getContext('2d')
+  if (!measure) throw new Error('Canvas2D not available')
+
+  type Row = { font: string; fill: string; text: string }
+  const rows: Row[] = []
+  const pushLines = (font: string, fill: string, text: string) => {
+    measure.font = font
+    for (const line of wrapLine(measure, text, inner)) {
+      rows.push({ font, fill, text: line })
+    }
+  }
+
+  pushLines('700 18px ui-sans-serif, system-ui, sans-serif', '#fafafa', 'Web3 Red Flag Detector')
+  rows.push({ font: '13px ui-sans-serif, system-ui, sans-serif', fill: '#a1a1aa', text: '' })
+  pushLines('600 14px ui-sans-serif, system-ui, sans-serif', '#e4e4e7', `Pattern tally: ${result.score}/100`)
+  pushLines('13px ui-sans-serif, system-ui, sans-serif', '#d4d4d8', `Level: ${result.severity}`)
+  rows.push({ font: '13px ui-sans-serif, system-ui, sans-serif', fill: '#a1a1aa', text: '' })
+  pushLines('13px ui-sans-serif, system-ui, sans-serif', '#d4d4d8', result.summary)
+  rows.push({ font: '12px ui-sans-serif, system-ui, sans-serif', fill: '#a1a1aa', text: '' })
+  pushLines('600 12px ui-sans-serif, system-ui, sans-serif', '#fca5a5', 'Matched patterns')
+
+  const hits = result.hits.slice(0, PLAIN_MAX_HITS)
+  if (hits.length === 0) {
+    pushLines('12px ui-sans-serif, system-ui, sans-serif', '#71717a', '(none)')
+  } else {
+    for (const h of hits) {
+      pushLines(
+        '600 12px ui-sans-serif, system-ui, sans-serif',
+        '#fecaca',
+        `• ${h.title} (+${h.weight})`,
+      )
+      measure.font = '12px ui-sans-serif, system-ui, sans-serif'
+      for (const wl of wrapLine(measure, h.detail, inner - 10)) {
+        rows.push({ font: '12px ui-sans-serif, system-ui, sans-serif', fill: '#a1a1aa', text: `  ${wl}` })
+      }
+    }
+  }
+  if (result.hits.length > PLAIN_MAX_HITS) {
+    pushLines(
+      '11px ui-sans-serif, system-ui, sans-serif',
+      '#71717a',
+      `… and ${result.hits.length - PLAIN_MAX_HITS} more (copy text report for full list).`,
+    )
+  }
+
+  rows.push({ font: '11px ui-sans-serif, system-ui, sans-serif', fill: '#52525b', text: '' })
+  pushLines('11px ui-sans-serif, system-ui, sans-serif', '#a1a1aa', '—')
+  pushLines(
+    '11px ui-sans-serif, system-ui, sans-serif',
+    '#a1a1aa',
+    'Not financial advice — entertainment / gut-check tool only.',
+  )
+  pushLines(
+    '11px ui-sans-serif, system-ui, sans-serif',
+    '#71717a',
+    'Plain-text PNG (no screenshot). Same data as the card.',
+  )
+
+  const contentH = PLAIN_PAD * 2 + rows.length * lineH + 8
+  const hCss = Math.min(30000, Math.max(320, contentH))
+
+  canvas.width = PLAIN_W * 2
+  canvas.height = Math.ceil(hCss * 2)
+  const ctx = canvas.getContext('2d')
+  if (!ctx) throw new Error('Canvas2D not available')
+  ctx.scale(2, 2)
+  ctx.fillStyle = '#0a0a0c'
+  ctx.fillRect(0, 0, PLAIN_W, hCss)
+
+  let y = PLAIN_PAD + 14
+  for (const row of rows) {
+    if (row.text === '') {
+      y += 8
+      continue
+    }
+    ctx.font = row.font
+    ctx.fillStyle = row.fill
+    ctx.fillText(row.text, PLAIN_PAD, y)
+    y += lineH
+  }
+
+  return canvas
 }
 
 export async function downloadResultPng(
   element: HTMLElement,
+  result: ScanResult,
   filename = 'web3-red-flag-report.png',
 ): Promise<void> {
   await document.fonts.ready.catch(() => undefined)
 
-  const html2canvas = (await import('html2canvas')).default
   const w = Math.max(1, element.offsetWidth || element.scrollWidth)
   const h = Math.max(1, element.offsetHeight || element.scrollHeight)
   const scales = pickScale(w, h)
 
   let snap: HTMLCanvasElement | null = null
-  let lastErr: unknown
-  for (const scale of scales) {
-    try {
-      snap = await renderToCanvas(element, scale, html2canvas)
-      break
-    } catch (e) {
-      lastErr = e
+
+  try {
+    snap = await renderViaHtmlToImage(element)
+  } catch {
+    /* try html2canvas */
+  }
+
+  if (!snap) {
+    const html2canvas = (await import('html2canvas')).default
+    for (const scale of scales) {
+      try {
+        snap = await renderToCanvas(element, scale, html2canvas)
+        break
+      } catch {
+        /* next scale */
+      }
     }
   }
+
+  const plain = () => renderPlaintextReportPng(result)
+
   if (!snap) {
-    try {
-      snap = await renderViaHtmlToImage(element)
-    } catch (e2) {
-      const first = lastErr instanceof Error ? lastErr.message : String(lastErr)
-      const second = e2 instanceof Error ? e2.message : String(e2)
-      throw new Error(`PNG capture failed (${first}; fallback: ${second})`)
-    }
+    await triggerPngDownload(plain(), filename)
+    return
   }
 
   const barH = 48
@@ -183,7 +321,10 @@ export async function downloadResultPng(
   out.width = snap.width
   out.height = snap.height + barH
   const ctx = out.getContext('2d')
-  if (!ctx) throw new Error('Could not create export canvas')
+  if (!ctx) {
+    await triggerPngDownload(plain(), filename)
+    return
+  }
 
   ctx.drawImage(snap, 0, 0)
   const y0 = snap.height
@@ -204,7 +345,11 @@ export async function downloadResultPng(
     y0 + 38,
   )
 
-  await triggerPngDownload(out, filename)
+  try {
+    await triggerPngDownload(out, filename)
+  } catch {
+    await triggerPngDownload(plain(), filename)
+  }
 }
 
 export { WATERMARK }
