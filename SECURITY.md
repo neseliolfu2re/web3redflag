@@ -20,7 +20,7 @@ The app runs in **your browser**. Still, you should **not** paste into the tool 
 - **Full wallet export** data or **API keys**  
 - Highly sensitive **personal data** you would not want in page memory, screenshots, or exports  
 
-If you already pasted something sensitive: rotate credentials, move funds if appropriate, and treat the session as potentially exposed depending on your threat model.
+If you already pasted something sensitive: rotate credentials, transfer funds if appropriate, and treat the session as potentially exposed depending on your threat model.
 
 ## How the app handles text (default build)
 

@@ -6,26 +6,43 @@
 import {
   matchesAny,
   anonymousFounder,
+  airdropDrivenActivity,
   airdropFarming,
   auditContracts,
   bigUpdateDelays,
   botsHype,
   communityRewardsOnly,
+  controversialTokenomics,
+  continuousBearishStructure,
+  copyPasteEcosystem,
   doesntCareCommunity,
+  extremeDowntrendFromAth,
   fakeEngagement,
   founderBehavior,
   giveawayEngagement,
   githubIssues,
   gmCulture,
+  heavyVcInfluence,
+  highValuationDemandMismatch,
+  incentiveVsRealCommunity,
+  inefficientEcosystemManagement,
   influencerCoord,
+  insufficientDeveloperSupportEngagement,
+  lackEcosystemProjectSupport,
+  lackSustainedBuyPressure,
+  liquidityExitAfterLaunch,
+  lowCommunityValueAlignment,
   marketingInconsistent,
   memeNextBig,
   modsCensor,
+  languageLearningCurve,
+  narrativeDrivenGrowth,
   noCommunity,
   noTokenUtility,
   noUseCase,
   noWorkingProduct,
   notDecentralized,
+  perceivedNepotismInsiderFavoritism,
   priceMarketing,
   questionsIgnored,
   rebrandPivot,
@@ -38,9 +55,14 @@ import {
   tokenSoonForever,
   tokenUnlockPressure,
   upgradeableUnclear,
+  validatorCentralization,
   vcInsiderSupply,
   vibeCheckQuotes,
   walletTreasury,
+  weakInternalTeamSupportRecognition,
+  weakLongTermSustainability,
+  weakMarketingExecution,
+  weakReactionPositiveNews,
   whitepaperVague,
 } from './redFlagLexicon'
 
@@ -227,7 +249,7 @@ const RULES: Rule[] = [
   {
     id: 'exclusive-dm',
     title: '“DM me” / off-platform deal',
-    detail: 'Scammers move you to DMs to avoid public scrutiny.',
+    detail: 'Scammers steer you to DMs to avoid public scrutiny.',
     weight: 11,
     test: ({ raw: r }) =>
       /\b(dm me|message me privately|ask in dm|telegram only|whatsapp only)\b/i.test(r),
@@ -329,7 +351,7 @@ const RULES: Rule[] = [
   {
     id: 'user-token-unlock-pressure',
     title: 'Token unlock / vesting pressure',
-    detail: 'Large upcoming unlocks can move markets — watch supply overhang.',
+    detail: 'Large upcoming unlocks can swing markets — watch supply overhang.',
     weight: 12,
     test: ({ folded: f }) => matchesAny(f, tokenUnlockPressure),
   },
@@ -339,6 +361,182 @@ const RULES: Rule[] = [
     detail: 'When most supply sits with insiders, retail can be exit liquidity.',
     weight: 12,
     test: ({ folded: f }) => matchesAny(f, vcInsiderSupply),
+  },
+  {
+    id: 'user-heavy-vc-influence',
+    title: 'Heavy VC influence',
+    detail:
+      'Narrative, roadmap, or culture shaped heavily by venture investors — worth asking who benefits after the round.',
+    weight: 11,
+    test: ({ folded: f }) => matchesAny(f, heavyVcInfluence),
+  },
+  {
+    id: 'user-controversial-tokenomics',
+    title: 'Controversial tokenomics',
+    detail:
+      'Fairness debates around emissions, unlocks, or insider share — not proof of fraud, but worth reading the fine print.',
+    weight: 12,
+    test: ({ folded: f }) => matchesAny(f, controversialTokenomics),
+  },
+  {
+    id: 'user-airdrop-driven-activity',
+    title: 'Airdrop-driven user activity',
+    detail:
+      'Usage dominated by farmers, quests, or points — metrics may collapse when incentives stop.',
+    weight: 11,
+    test: ({ folded: f }) => matchesAny(f, airdropDrivenActivity),
+  },
+  {
+    id: 'user-copy-paste-ecosystem',
+    title: 'Copy-paste ecosystem projects',
+    detail:
+      'Forks, templates, or thin rebrands — originality and maintenance burden matter for long-term value.',
+    weight: 10,
+    test: ({ folded: f }) => matchesAny(f, copyPasteEcosystem),
+  },
+  {
+    id: 'user-language-learning-curve',
+    title: 'Language / stack learning curve',
+    detail:
+      'Steep onboarding, unfamiliar syntax, or thin dev talent — can slow shipping vs more mature stacks.',
+    weight: 10,
+    test: ({ folded: f }) => matchesAny(f, languageLearningCurve),
+  },
+  {
+    id: 'user-validator-centralization',
+    title: 'Validator centralization concerns',
+    detail:
+      'Stake concentrated in few validators or geographies — check real decentralization vs marketing.',
+    weight: 11,
+    test: ({ folded: f }) => matchesAny(f, validatorCentralization),
+  },
+  {
+    id: 'user-narrative-driven-growth',
+    title: 'Narrative-driven growth',
+    detail:
+      'Price and attention follow story more than shipped product — verify roadmaps and usage, not vibes alone.',
+    weight: 11,
+    test: ({ folded: f }) => matchesAny(f, narrativeDrivenGrowth),
+  },
+  {
+    id: 'user-weak-long-term-sustainability',
+    title: 'Weak long-term project sustainability',
+    detail:
+      'Runway, revenue, or treasury concerns — incentive programs alone rarely fund teams forever.',
+    weight: 11,
+    test: ({ folded: f }) => matchesAny(f, weakLongTermSustainability),
+  },
+  {
+    id: 'user-incentive-vs-community',
+    title: 'Incentives vs real community',
+    detail:
+      'Organic believers vs mercenary farmers — when rewards end, only real community tends to stay.',
+    weight: 11,
+    test: ({ folded: f }) => matchesAny(f, incentiveVsRealCommunity),
+  },
+  {
+    id: 'user-extreme-downtrend-ath',
+    title: 'Extreme downtrend from ATH',
+    detail:
+      'Deep drawdowns from the peak can reflect sentiment, liquidity, or fundamentals — context matters.',
+    weight: 10,
+    test: ({ folded: f }) => matchesAny(f, extremeDowntrendFromAth),
+  },
+  {
+    id: 'user-weak-reaction-positive-news',
+    title: 'Weak reaction to positive news',
+    detail:
+      '“Sell the news” or flat tape on catalysts — markets may be skeptical or already positioned.',
+    weight: 10,
+    test: ({ folded: f }) => matchesAny(f, weakReactionPositiveNews),
+  },
+  {
+    id: 'user-continuous-bearish-structure',
+    title: 'Continuous bearish price structure',
+    detail:
+      'Lower highs, persistent distribution, or one-sided selling — chart structure is descriptive, not proof.',
+    weight: 10,
+    test: ({ folded: f }) => matchesAny(f, continuousBearishStructure),
+  },
+  {
+    id: 'user-lack-sustained-buy-pressure',
+    title: 'Lack of sustained buy pressure',
+    detail:
+      'Thin bids, failed bounces, or selling into rallies — liquidity and conviction may be weak.',
+    weight: 10,
+    test: ({ folded: f }) => matchesAny(f, lackSustainedBuyPressure),
+  },
+  {
+    id: 'user-high-valuation-demand-mismatch',
+    title: 'High valuation vs real demand mismatch',
+    detail:
+      'FDV vs volume, adoption, or revenue — “priced in” hype can detach from real usage.',
+    weight: 11,
+    test: ({ folded: f }) => matchesAny(f, highValuationDemandMismatch),
+  },
+  {
+    id: 'user-liquidity-exit-after-launch',
+    title: 'Liquidity exit pressure after launch',
+    detail:
+      'Post-TGE dumps, launch sellers, or pulled liquidity — early holders often exit into thin books.',
+    weight: 11,
+    test: ({ folded: f }) => matchesAny(f, liquidityExitAfterLaunch),
+  },
+  {
+    id: 'user-weak-marketing-execution',
+    title: 'Weak marketing execution',
+    detail:
+      'Invisible brand, messy GTM, or incoherent messaging — attention is competitive in crypto.',
+    weight: 9,
+    test: ({ folded: f }) => matchesAny(f, weakMarketingExecution),
+  },
+  {
+    id: 'user-inefficient-ecosystem-management',
+    title: 'Inefficient ecosystem management',
+    detail:
+      'Grants, funds, or builder support that feel opaque, slow, or political — hurts ecosystem velocity.',
+    weight: 10,
+    test: ({ folded: f }) => matchesAny(f, inefficientEcosystemManagement),
+  },
+  {
+    id: 'user-nepotism-insider-favoritism',
+    title: 'Perceived nepotism / insider favoritism',
+    detail:
+      '“Friends and family” rounds, crony allocations, or conflicts of interest — verify disclosures and governance.',
+    weight: 11,
+    test: ({ folded: f }) => matchesAny(f, perceivedNepotismInsiderFavoritism),
+  },
+  {
+    id: 'user-lack-ecosystem-project-support',
+    title: 'Lack of ecosystem project support',
+    detail:
+      'Funds, grants, or attention drying up for ecosystem teams — builders may leave for greener chains.',
+    weight: 10,
+    test: ({ folded: f }) => matchesAny(f, lackEcosystemProjectSupport),
+  },
+  {
+    id: 'user-insufficient-developer-support',
+    title: 'Insufficient developer support & engagement',
+    detail:
+      'Weak DevRel, unanswered builder questions, or poor technical outreach — slows adoption and goodwill.',
+    weight: 10,
+    test: ({ folded: f }) => matchesAny(f, insufficientDeveloperSupportEngagement),
+  },
+  {
+    id: 'user-weak-internal-team-support',
+    title: 'Weak internal team support & recognition',
+    detail:
+      'Toxic culture, burnout ignored, or credit issues — internal health often leaks into public delivery.',
+    weight: 10,
+    test: ({ folded: f }) => matchesAny(f, weakInternalTeamSupportRecognition),
+  },
+  {
+    id: 'user-low-community-value-alignment',
+    title: 'Low community value alignment',
+    detail:
+      'Roadmap or behavior that clashes with what holders say they care about — trust and retention suffer.',
+    weight: 10,
+    test: ({ folded: f }) => matchesAny(f, lowCommunityValueAlignment),
   },
   {
     id: 'user-no-token-utility',
@@ -496,7 +694,7 @@ const RULES: Rule[] = [
   },
   {
     id: 'user-wallet-treasury',
-    title: 'Weird wallet movements / treasury not transparent',
+    title: 'Weird wallet activity / treasury not transparent',
     detail: 'Opaque treasuries and odd transfers break trust.',
     weight: 12,
     test: ({ folded: f }) => matchesAny(f, walletTreasury),

@@ -66,7 +66,7 @@ export const whitepaperVague: RegExp[] = [
 export const roadmapIssues: RegExp[] = [
   /\broad\s*map\b.*\b(no dates|without dates|no timeline|undated|tbd)\b/i,
   /\b(no dates|no timeline)\b.*\broad\s*map\b/i,
-  /\broad\s*map\b.*\b(keeps changing|changed again|moving goalposts|slip|slipped)\b/i,
+  /\broad\s*map\b.*\b(keeps changing|changed again|shifting goalposts|slip|slipped)\b/i,
   /\bshifting road\s*map\b/i,
   /\broad\s*map\b.*\b(pivot|pivoted)\b/i,
   /\broad\s*map\b.*\b(constantly|always)\b.*\b(chang|updat)\b/i,
@@ -280,7 +280,7 @@ export const gmCulture: RegExp[] = [
 
 /** Mods / toxic positivity */
 export const modsCensor: RegExp[] = [
-  /\bmods?\b.*\b(delete|remove|ban)\b/i,
+  /\bmods?\b.*\b(delete|purge|ban)\b/i,
   /\bdelete(s|d)? criticism\b/i,
   /\bban(ned)? for fud\b/i,
   /\bcensor(ship)?\b/i,
@@ -372,8 +372,8 @@ export const walletTreasury: RegExp[] = [
   /\bsuspicious transfer/i,
   /\btreasury not transparent\b/i,
   /\bopaque treasury\b/i,
-  /\bmoved funds\b/i,
-  /\bstrange (wallet )?movement/i,
+  /\btransferred funds\b/i,
+  /\bstrange (wallet )?activity/i,
 ]
 
 /** Not decentralized */
@@ -436,6 +436,337 @@ export const noCommunity: RegExp[] = [
   /\blacks community\b/i,
   /\bno real users\b/i,
   /\bcommunity (is )?(dead|empty|gone)\b/i,
+]
+
+/** Heavy VC influence (narrative / control, not only allocation %) */
+export const heavyVcInfluence: RegExp[] = [
+  /\bheavy vc influence\b/i,
+  /\bvc influence\b/i,
+  /\bheavily vc[- ]backed\b/i,
+  /\bvc[- ]driven narrative\b/i,
+  /\bvc narrative\b/i,
+  /\bvc (money|money'?s) (shapes|controls|drives)\b/i,
+  /\bvc (board|pressure|agenda)\b/i,
+  /\binfluenced by (the )?vcs?\b/i,
+  /\bventure (capital|firms?) (call|the shots|control)\b/i,
+  /\binsider vc (deal|round)\b/i,
+  /\bvc (overhang|overhangs)\b/i,
+  /\btoo much vc\b/i,
+  /\bvc (money )?speaks\b/i,
+]
+
+/** Controversial or criticized tokenomics */
+export const controversialTokenomics: RegExp[] = [
+  /\bcontroversial tokenomics\b/i,
+  /\bunfair tokenomics\b/i,
+  /\bpredatory tokenomics\b/i,
+  /\btokenomics (backlash|controversy|debate)\b/i,
+  /\bsketchy tokenomics\b/i,
+  /\b(token|emission) (schedule )?unfair\b/i,
+  /\binflation (too high|out of control)\b/i,
+  /\binsider[- ]heavy (allocation|supply)\b/i,
+  /\bteam (allocation|share) (too high|too large)\b/i,
+  /\bunlock (schedule )?(unfair|sketchy)\b/i,
+  /\bvesting (is |was )?(unfair|predatory)\b/i,
+  /\bdump(ing)? on retail\b/i,
+  /\bretail (gets|got) (dumped|rekt)\b/i,
+  /\bopaque tokenomics\b/i,
+  /\bchanging tokenomics\b/i,
+]
+
+/** User activity driven mainly by airdrops / quests */
+export const airdropDrivenActivity: RegExp[] = [
+  /\bairdrop[- ]driven\b/i,
+  /\bdriven by (the )?airdrop\b/i,
+  /\bairdrop[- ]driven user\b/i,
+  /\buser activity.*\b(airdrop|points|quests)\b/i,
+  /\bactivity (is |mostly |largely )\b.*\b(farm|farming|quests)\b/i,
+  /\bmercenary (liquidity|users|capital)\b/i,
+  /\bonly (here )?for (the )?(points|quests|airdrop)\b/i,
+  /\bfarm(ing)? (the )?(points|quests|campaign)\b/i,
+  /\bquest[- ]only (users|activity)\b/i,
+  /\bincentivized (testnet )?activity\b/i,
+  /\bsybil (farm|farming|activity)\b/i,
+  /\bnot organic (usage|activity|growth)\b/i,
+]
+
+/** Copy-paste / fork ecosystem projects */
+export const copyPasteEcosystem: RegExp[] = [
+  /\bcopy[- ]paste (ecosystem )?project\b/i,
+  /\bcopy[- ]paste (from|of)\b/i,
+  /\b(template|cookie[- ]cutter) (defi|nft|dao)\b/i,
+  /\bfork of (ethereum|eth|solana|uniswap)\b/i,
+  /\bunoriginal fork\b/i,
+  /\becosystem (clone|copy)\b/i,
+  /\bderivative (protocol|project|dex)\b/i,
+  /\bsame (code|ui) as\b/i,
+  /\brebranded fork\b/i,
+  /\bclone of\b.*\b(on|from)\b/i,
+  /\bethereum (clone|copy) on\b/i,
+  /\bthinly veiled fork\b/i,
+]
+
+/** Language / stack learning curve (dev onboarding friction) */
+export const languageLearningCurve: RegExp[] = [
+  /\blanguage learning curve\b/i,
+  /\bsteep learning curve\b.*\b(dev|developer|stack|language|ecosystem|syntax|chain|onboard)\b/i,
+  /\b(learning curve|onboarding)\b.*\b(dev|developer|stack|language)\b/i,
+  /\bbarrier to entry\b.*\b(dev|developer|new devs)\b/i,
+  /\bshortage of\b.*\b(dev|developer)s?\b/i,
+  /\bunfamiliar (language|syntax|stack)\b/i,
+  /\bhard(er)? to learn\b.*\b(language|stack|syntax)\b/i,
+  /\bdeveloper ramp[- ]up\b/i,
+  /\bnew (language|stack)\b.*\b(friction|slow|steep)\b/i,
+]
+
+/** Validator centralization / stake concentration */
+export const validatorCentralization: RegExp[] = [
+  /\bvalidator centrali[sz]ation\b/i,
+  /\bcentrali[sz]ed validators\b/i,
+  /\bfew validators (control|own|run)\b/i,
+  /\bvalidator concentration\b/i,
+  /\bstake (concentration|skewed|centralized)\b/i,
+  /\btop (10|5|3) validators\b/i,
+  /\bsuperminority\b/i,
+  /\bnakamoto coefficient\b/i,
+  /\bstake (too )?concentrated\b/i,
+  /\bwhale validators\b/i,
+  /\bmajority (of )?stake (in|with)\b/i,
+  /\bgeo[- ]centrali[sz]ed validators\b/i,
+  /\bcloud validators\b/i,
+]
+
+/** Narrative-driven growth / story over substance */
+export const narrativeDrivenGrowth: RegExp[] = [
+  /\bnarrative[- ]driven (growth|pump|rally)\b/i,
+  /\bgrowth (is |was )?all narrative\b/i,
+  /\bnarrative (pump|trade|coin)\b/i,
+  /\ball (hype|price) (is |was )?narrative\b/i,
+  /\bstory stock\b/i,
+  /\bhype narrative\b/i,
+  /\bmarketing (over|beats) product\b/i,
+  /\bnarrative (first|only)\b/i,
+  /\bprice follows (the )?narrative\b/i,
+  /\btwitter (drives|is) the (product|roadmap)\b/i,
+  /\bno fundamentals (just|only) (narrative|story)\b/i,
+  /\brotating narratives\b/i,
+]
+
+/** Weak long-term sustainability / runway */
+export const weakLongTermSustainability: RegExp[] = [
+  /\bweak long[- ]term sustainability\b/i,
+  /\blong[- ]term sustainability\b.*\b(weak|poor|doubtful)\b/i,
+  /\bunsustainable (in the )?long (run|term)\b/i,
+  /\bno (clear )?long[- ]term (plan|revenue)\b/i,
+  /\bwon'?t survive (the )?(bear|downturn)\b/i,
+  /\brunway (ends?|running out|short)\b/i,
+  /\btreasury (deplet|dry|running low)\b/i,
+  /\bno (recurring )?revenue\b/i,
+  /\bburn rate (too high|unsustainable)\b/i,
+  /\bunsustainable (business|model|project)\b/i,
+  /\bshort[- ]term incentives (only)?\b/i,
+  /\bcan'?t fund (itself|development)\b/i,
+  /\bdependent on (new )?raises\b/i,
+]
+
+/** Incentivized users vs organic community */
+export const incentiveVsRealCommunity: RegExp[] = [
+  /\bincentive(s)? vs (real |organic )?community\b/i,
+  /\breal community vs (incentives|points)\b/i,
+  /\bmercenary community\b/i,
+  /\bincentivized users (not|aren'?t) (real|organic)\b/i,
+  /\bpoints (not|instead of) community\b/i,
+  /\bnot (an )?organic community\b/i,
+  /\bpaid (community|engagement) (only|farm)\b/i,
+  /\bfarmers not (fans|believers|users)\b/i,
+  /\bcommunity (is |was )?(fake|hollow|paid)\b/i,
+  /\bartificial community\b/i,
+  /\bsybil (community|users)\b/i,
+  /\bliquidity (mining )?mercenar/i,
+  /\bwhen incentives end\b/i,
+  /\bghost town after (airdrop|incentives)\b/i,
+]
+
+/** Extreme downtrend from all-time high */
+export const extremeDowntrendFromAth: RegExp[] = [
+  /\bextreme downtrend\b.*\b(ath|all[- ]time high)\b/i,
+  /\b(down|crashed|dumped) (-)?\d{1,3}% (from|off) (the )?ath\b/i,
+  /\b(far|way) below (the )?ath\b/i,
+  /\bnever (reclaimed|recovered) (the )?ath\b/i,
+  /\bath (was|is) (ages|years) ago\b/i,
+  /\bbrutal drawdown\b.*\b(from ath|from peak)\b/i,
+  /\b-\d{2,3}% from ath\b/i,
+  /\bdown bad from ath\b/i,
+  /\bath to (now|here)\b.*\b(down|ugly|brutal)\b/i,
+  /\bcollapsed from (the )?peak\b/i,
+  /\bpeak to trough\b/i,
+  /\bstill (down|under) (the )?ath\b/i,
+]
+
+/** Weak reaction to positive / bullish news */
+export const weakReactionPositiveNews: RegExp[] = [
+  /\bweak reaction to (good|positive|bullish) news\b/i,
+  /\b(positive|good) news\b.*\b(no rally|didn'?t pump|flat|dumped|sold off)\b/i,
+  /\bsell the news\b/i,
+  /\bmuted reaction\b.*\b(announcement|partnership|listing)\b/i,
+  /\bno follow[- ]through (on|after) (the )?news\b/i,
+  /\brally failed\b.*\b(despite|even with)\b/i,
+  /\bpriced in (already)?\b.*\b(no bounce|flat tape|dead)\b/i,
+  /\bgood news.*bad price\b/i,
+  /\bannouncement.*(dump|red candle)\b/i,
+  /\bno bounce on (the )?catalyst\b/i,
+]
+
+/** Continuous bearish price structure */
+export const continuousBearishStructure: RegExp[] = [
+  /\bcontinuous bearish (structure|price action)\b/i,
+  /\bbearish (market )?structure\b/i,
+  /\blower highs\b.*\b(lower lows|downtrend)\b/i,
+  /\bseries of lower highs\b/i,
+  /\bdeath (spiral|by) (a )?thousand cuts\b/i,
+  /\b(stair|staircase) step( )?down\b/i,
+  /\bstructurally bearish\b/i,
+  /\bone[- ]sided (sell|distribution)\b/i,
+  /\bpersistent (downtrend|bleed|sell pressure)\b/i,
+  /\bbreakdown (after|on) breakdown\b/i,
+  /\bno higher highs\b/i,
+]
+
+/** Lack of sustained buy pressure */
+export const lackSustainedBuyPressure: RegExp[] = [
+  /\black of sustained buy (pressure|demand)\b/i,
+  /\bno sustained (buyers|bids|accumulation)\b/i,
+  /\bbuy (pressure|side) (weak|thin|dried up)\b/i,
+  /\bthin (order )?book\b.*\b(bids|buy side)\b/i,
+  /\babsorption failed\b/i,
+  /\bno follow[- ]through buying\b/i,
+  /\bbounces (keep )?failing\b/i,
+  /\bsells (into|on) every (bounce|rip)\b/i,
+  /\bcan'?t hold (gains|the bid)\b/i,
+  /\bconstant (overhead|supply)\b/i,
+]
+
+/** High early valuation vs real demand mismatch */
+export const highValuationDemandMismatch: RegExp[] = [
+  /\bhigh (early )?valuation\b.*\b(real demand|volume|usage)\b/i,
+  /\bvaluation (mismatch|disconnect)\b/i,
+  /\bfdv (vs|versus)\b.*\b(volume|liquidity|demand)\b/i,
+  /\bovervalued (at|vs)\b.*\b(real|actual) (usage|adoption|demand)\b/i,
+  /\brich valuation\b.*\b(thin|weak) (liquidity|volume)\b/i,
+  /\bfully diluted.*\b(unrealistic|absurd)\b/i,
+  /\bprice (implies|assumes)\b.*\b(no users|no revenue)\b/i,
+  /\bhype (vs|versus) fundamentals\b/i,
+  /\bmarket cap (not|doesn'?t) match\b/i,
+  /\bpriced for perfection\b/i,
+]
+
+/** Liquidity exit pressure after launch / TGE */
+export const liquidityExitAfterLaunch: RegExp[] = [
+  /\bliquidity exit\b.*\b(after launch|post[- ]tge|post launch)\b/i,
+  /\bpost[- ]?(tge|launch) (dump|sell[- ]off|pressure)\b/i,
+  /\bexit liquidity\b.*\b(at|on) (launch|listing|tge)\b/i,
+  /\bsellers (at|on) (launch|day one|tge)\b/i,
+  /\bdump (on|at) (launch|listing|open)\b/i,
+  /\binsiders? (sold|dumped) (at|on|after)\b/i,
+  /\bfirst (day|hour) (dump|sell)\b/i,
+  /\blistings? (then )?dump\b/i,
+  /\btge (bloodbath|rug|dump)\b/i,
+  /\bpulled liquidity\b.*\b(after|post)\b/i,
+]
+
+/** Weak marketing / GTM execution */
+export const weakMarketingExecution: RegExp[] = [
+  /\bweak marketing (execution|team)?\b/i,
+  /\bmarketing (execution )?(is |was )?(weak|poor|bad)\b/i,
+  /\b(poor|bad|nonexistent) (go[- ]to[- ]market|gtm|marketing)\b/i,
+  /\bincoherent (marketing|messaging|brand)\b/i,
+  /\binvisible (project|brand) (on )?(crypto )?twitter\b/i,
+  /\bno coherent (narrative|story|brand)\b/i,
+  /\bmarketing (failure|flop|miss)\b/i,
+  /\bcan'?t (get|cut) through (the )?noise\b/i,
+  /\bzero (marketing|outreach|pr)\b/i,
+  /\bundermarketed\b/i,
+]
+
+/** Inefficient ecosystem / grants management */
+export const inefficientEcosystemManagement: RegExp[] = [
+  /\binefficient ecosystem (management|ops)\b/i,
+  /\b(ecosystem )?grants? (mess|mismanaged|broken|opaque)\b/i,
+  /\bgrants? (committee|program)\b.*\b(ineffective|slow|political)\b/i,
+  /\becosystem fund\b.*\b(misused|wasted|poorly allocated)\b/i,
+  /\b(builder|dev) support\b.*\b(lacking|missing|slow)\b/i,
+  /\bno (clear )?(ecosystem )?strategy\b/i,
+  /\bfund (allocation|decisions)\b.*\b(opaque|crony|random)\b/i,
+  /\bpet projects\b.*\b(grants|fund)\b/i,
+  /\bprocess (is )?(broken|a mess)\b/i,
+]
+
+/** Perceived nepotism / insider favoritism */
+export const perceivedNepotismInsiderFavoritism: RegExp[] = [
+  /\b(perceived )?nepotism\b/i,
+  /\binsider favoritism\b/i,
+  /\bfriends and family (round|allocation|deal)\b/i,
+  /\bcrony (capital|allocation|deal)\b/i,
+  /\bconnected insiders\b/i,
+  /\binsider (deals?|round)\b.*\b(favor|unfair)\b/i,
+  /\brevolving door\b.*\b(insider|team|vc)\b/i,
+  /\ballocation (went|goes) to (friends|insiders)\b/i,
+  /\bwho you know\b.*\b(allocation|grant|deal)\b/i,
+  /\bopaque (allocation|hiring)\b.*\b(insider|related)\b/i,
+  /\bconflict of interest\b.*\b(allocation|grant)\b/i,
+]
+
+/** Lack of ecosystem project support */
+export const lackEcosystemProjectSupport: RegExp[] = [
+  /\black of ecosystem (project )?support\b/i,
+  /\bno support for ecosystem projects\b/i,
+  /\becosystem projects?\b.*\b(abandoned|left behind|on their own)\b/i,
+  /\bbuilders?\b.*\b(left hanging|no backing|no support)\b/i,
+  /\becosystem (funding|grants?)\b.*\b(cut|dried up|paused|stopped)\b/i,
+  /\bno (real )?ecosystem support\b/i,
+  /\bfund (doesn'?t|won'?t) support\b.*\b(builders|projects)\b/i,
+  /\bgrant (program )?(ended|pulled)\b/i,
+  /\becosystem (teams?|projects?)\b.*\b(ignored|neglected)\b/i,
+]
+
+/** Insufficient developer support & engagement */
+export const insufficientDeveloperSupportEngagement: RegExp[] = [
+  /\binsufficient developer support\b/i,
+  /\bdeveloper support\b.*\b(lacking|missing|weak|poor)\b/i,
+  /\bpoor (dev|developer) engagement\b/i,
+  /\bno (real )?(devrel|developer relations)\b/i,
+  /\bdevs?\b.*\b(ignored|ghosted|unheard)\b/i,
+  /\bno technical support for (dev|developer|builder)s?\b/i,
+  /\bfoundation\b.*\b(ignores|snubs) (dev|developer|builder)s?\b/i,
+  /\black of\b.*\b(dev|developer) (outreach|support|engagement)\b/i,
+  /\bbuilder (questions?|requests?)\b.*\b(unanswered|ignored)\b/i,
+]
+
+/** Weak internal team support & recognition */
+export const weakInternalTeamSupportRecognition: RegExp[] = [
+  /\bweak internal (team )?support\b/i,
+  /\bno recognition for (the )?(team|contributors|engineers)\b/i,
+  /\bcontributors?\b.*\b(unrecognized|no credit|stolen credit)\b/i,
+  /\btoxic internal (culture|politics)\b/i,
+  /\bburnout\b.*\b(ignored|denied)\b/i,
+  /\binternal (team )?churn\b/i,
+  /\bteam morale\b.*\b(low|bad|toxic)\b/i,
+  /\bleadership (takes|took) (all )?credit\b/i,
+  /\bno internal (support|recognition)\b/i,
+  /\bemployees?\b.*\b(undervalued|overworked|unheard)\b/i,
+]
+
+/** Low community value alignment */
+export const lowCommunityValueAlignment: RegExp[] = [
+  /\blow community value alignment\b/i,
+  /\b(misaligned|not aligned) with (the )?community\b/i,
+  /\bcommunity values\b.*\b(ignored|disregarded|violated)\b/i,
+  /\bvalues (don'?t|do not) match (the )?community\b/i,
+  /\bnot listening to (the )?community\b/i,
+  /\bcommunity (doesn'?t|does not) trust\b/i,
+  /\bout of touch with (the )?community\b/i,
+  /\bcommunity (backlash|revolt)\b.*\b(values|direction|vision)\b/i,
+  /\bdiscordant with community (values|expectations)\b/i,
 ]
 
 /** Skeptical one-liners (expanded) */
