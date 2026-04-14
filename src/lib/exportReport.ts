@@ -124,14 +124,14 @@ export function renderPlaintextReportPng(result: ScanResult): HTMLCanvasElement 
     }
   }
 
-  pushLines('bold 18px sans-serif', '#f4f4f5', 'Web3 Red Flag Detector')
+  pushLines('bold 18px sans-serif', '#fafafa', 'Web3 Red Flag Detector')
   rows.push({ font: '14px sans-serif', fill: '#a1a1aa', text: '', gap: 10 })
-  pushLines('600 15px sans-serif', '#e4e4e7', `Pattern tally: ${result.score}/100`)
+  pushLines('bold 15px sans-serif', '#e4e4e7', `Pattern tally: ${result.score}/100`)
   pushLines('14px sans-serif', '#d4d4d8', `Level: ${result.severity}`)
   rows.push({ font: '14px sans-serif', fill: '#a1a1aa', text: '', gap: 10 })
   pushLines('14px sans-serif', '#d4d4d8', result.summary)
   rows.push({ font: '13px sans-serif', fill: '#a1a1aa', text: '', gap: 12 })
-  pushLines('600 13px sans-serif', '#fca5a5', 'Matched patterns')
+  pushLines('bold 13px sans-serif', '#fca5a5', 'Matched patterns')
 
   const hits = result.hits.slice(0, PLAIN_MAX_HITS)
   if (hits.length === 0) {
@@ -139,7 +139,7 @@ export function renderPlaintextReportPng(result: ScanResult): HTMLCanvasElement 
   } else {
     for (const h of hits) {
       pushLines(
-        '600 13px sans-serif',
+        'bold 13px sans-serif',
         '#fecaca',
         `* ${h.title} (+${h.weight})`,
       )
@@ -190,6 +190,7 @@ export function renderPlaintextReportPng(result: ScanResult): HTMLCanvasElement 
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
   }
 
+  ctx.textBaseline = 'alphabetic'
   ctx.fillStyle = '#0a0a0c'
   ctx.fillRect(0, 0, PLAIN_W, totalH)
 
